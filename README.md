@@ -39,15 +39,15 @@ The `DISCORD_GUILDID` is the id of your guild, you will need to add the bot to t
 if someone what to have the image too, they will need to have access to the guild.  
 Then the `PORT` is whatever port the web app runs on.  
 if your server do not have any webserver the port can be 80.  
-But for that I will let you do as you wish, we all have our own way to deploy our apps. 
+But for that I will let you do as you wish, we all have our own way of deploying our apps. 
 
 Once the .env is set, you are ready to install all the packages needed.  
 `npm i`
-For the testing phase you will need `nodemon` a package that restart apps when it sees changes.
+For the testing phase, you will need `nodemon` a package that restarts apps when it sees changes.
 `npm i -g nodemon`
-or for Linux as non root user: 
+or for Linux as non-root user: 
 `sudo npm i -g nodemon`
-This step may take a bit of time, Discord is dependent on many packages, and is pretty heavy.  
+This step may take a bit of time, Discord is dependent on many packages and is pretty heavy.  
 once done, you may run the app:  
 `npm run dev`
 
@@ -56,7 +56,7 @@ to get your status image go to "http://localhost:3000/img/[YOUR ID]"
 for me it would be: "http://localhost:3000/img/754359468275531906" 
 ![](https://cdn.asthriona.com/i/2024/01/WindowsTerminal_240131_0752AM26864.png)
 
-That's it! You can now share it, set it as bio on Anilist, your GitHub profile, where ever you want :)
+That's it! You can now share it, set it as bio on Anilist, your GitHub profile, or wherever you want :)
 
 ## Contribute
 You may contribute to this repo, by opening a PR or requests features by opening an issue.  
@@ -65,14 +65,13 @@ Any other improvement should be OK!
 
 ## Getting help:
 I will give support only using GitHub, Not Twitter, Not Discord, not Emails. 
-if you need help, or find a bug, please open a new Issue.  
+if you need help or find a bug, please open a new Issue.  
 I will not add anyone as friend to give support. And this is not a [Stellar Corporation](https://github.com/Yukiko-Dev-Team) project. 
 Please do not join their support server to request help for this project. Only Issue in here.  
-Maybe at some point the project will be added to the SC Bug tracker.  
+Maybe at some point, the project will be added to the SC Bug tracker.  
   
 ## Helping me Personally. 
-I'am Makoto Kobayashi, Developement is only a hobby at this point, I'm not doing it professionally anymore, so if you want to help me with a few spare bucks to keep project like this alive, 
-please concider sponsoring me on Github!
-It would be greatly apreciated!
-
-<iframe src="https://github.com/sponsors/Asthriona/card" title="Sponsor Asthriona" height="225" width="600" style="border: 0;"></iframe>
+I am Makoto Kobayashi, Development is only a hobby at this point, I'm not doing it professionally anymore, so if you want to help me with a few spare bucks to keep a project like this alive, 
+please consider [sponsoring me on Github](https://github.com/sponsors/Asthriona)!
+It would be greatly appreciated!
+[Sponsor Page](https://github.com/sponsors/Asthriona)
