@@ -71,7 +71,7 @@ Please do not join their support server to request help for this project. Only I
 Maybe at some point, the project will be added to the SC Bug tracker.  
   
 ## Helping me Personally. 
-I am Makoto Kobayashi, Development is only a hobby at this point, I'm not doing it professionally anymore, so if you want to help me with a few spare bucks to keep a project like this alive, 
+I am Makoto Kobayashi, Development is only a hobby at this point, I'm not doing it professionally anymore, so if you want to help me with a few spare bucks to keep projects like this alive, 
 please consider [sponsoring me on Github](https://github.com/sponsors/Asthriona)!
 It would be greatly appreciated!
 [Sponsor Page](https://github.com/sponsors/Asthriona)
