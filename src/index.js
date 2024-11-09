@@ -81,7 +81,7 @@ app.get("/img/:userId", async (req, res) => {
     
     res.setHeader('Content-Type', 'image/svg+xml');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    
+
     res.send(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 120">
         <defs>
           <clipPath id="avatarClip">
@@ -120,8 +120,8 @@ app.get("/img/:userId", async (req, res) => {
         <g transform="translate(120,20)">
           <!-- Username -->
           <text 
-            x="20" 
-            y="35" 
+            x="0" 
+            y="20" 
             fill="#ffffff" 
             font-family="Arial, sans-serif" 
             font-size="20" 
@@ -131,8 +131,8 @@ app.get("/img/:userId", async (req, res) => {
           <!-- Custom Status (if exists) -->
           ${user.customStatus ? `
           <text 
-            x="20" 
-            y="60" 
+            x="10" 
+            y="45" 
             fill="#99aab5" 
             font-family="Arial, sans-serif" 
             font-size="16"
@@ -142,11 +142,11 @@ app.get("/img/:userId", async (req, res) => {
           <!-- Activity (if exists) -->
           ${activityDetails ? `
           <text 
-            x="20" 
-            y="${user.customStatus ? '85' : '60'}" 
+            x="10" 
+            y="${user.customStatus ? '65' : '60'}" 
             fill="#99aab5" 
             font-family="Arial, sans-serif" 
-            font-size="16"
+            font-size="12"
           >${activityDetails}</text>
           ` : ''}
         </g>
