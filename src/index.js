@@ -20,7 +20,17 @@ function getStatusColor(status) {
     }
 }
 
-// Route to render the status card as HTML
+// Helper function to get activity label
+function getActivityLabel(activity) {
+    switch (activity.type) {
+        case 0: return "Playing";
+        case 2: return "Listening to";
+        case 3: return "Watching";
+        case 5: return "Competing in";
+        default: return "";
+    }
+}
+
 app.get("/img/:userId", async (req, res) => {
     const userId = req.params.userId || "754359468275531906";
     const guild = await client.guilds.fetch(process.env.DISCORD_GUILDID);
@@ -30,16 +40,23 @@ app.get("/img/:userId", async (req, res) => {
         username: member.user.globalName || member.user.username,
         avatar: member.user.displayAvatarURL({ extension: 'png', size: 4096 }),
         status: member.presence ? member.presence.status : "offline",
-        customStatus: member.presence?.activities[0]?.state || "No custom status",
-        spotifyActivity: member.presence?.activities[1] 
-            ? `${member.presence.activities[1].details} - ${member.presence.activities[1].state}` 
-            : "No Spotify activity",
+        customStatus: member.presence?.activities[0]?.state || null,
     };
 
-    // Get the color based on the status
+    let activityDetails = null;
+    if (member.presence && member.presence.activities.length > 0) {
+        const activity = member.presence.activities.find(act => act.type === 0 || act.type === 2 || act.type === 3 || act.type === 5);
+        if (activity) {
+            const label = getActivityLabel(activity);
+            activityDetails = activity.type === 2 
+                ? `${label} ${activity.details} by ${activity.state}` 
+                : `${label} ${activity.name}`;
+        }
+    }
+
     const statusColor = getStatusColor(user.status);
 
-    // Render HTML content
+    // Render HTML content with conditional layout adjustments
     res.send(`
         <!DOCTYPE html>
         <html lang="en">
@@ -62,9 +79,25 @@ app.get("/img/:userId", async (req, res) => {
                     border: 2px solid #2c2f33;
                     border-radius: 50%;
                 }
-                .info { margin-left: 20px; }
-                .username { font-size: 20px; font-weight: bold; margin: 0; }
-                .custom-status, .spotify-activity { font-size: 16px; color: #99aab5; margin: 4px 0 0 0; }
+                .info { margin-left: 20px; display: flex; flex-direction: column; justify-content: center; }
+                .username {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin: ${user.customStatus || activityDetails ? '0 0 8px 0' : '0'};
+                    text-align: ${!user.customStatus && !activityDetails ? 'center' : 'left'};
+                }
+                .custom-status {
+                    font-size: 16px;
+                    color: #99aab5;
+                    margin: 0;
+                    display: ${user.customStatus ? 'block' : 'none'};
+                }
+                .activity {
+                    font-size: 16px;
+                    color: #99aab5;
+                    margin-top: ${user.customStatus ? '4px' : '0'};
+                    display: ${activityDetails ? 'block' : 'none'};
+                }
             </style>
         </head>
         <body>
@@ -75,8 +108,8 @@ app.get("/img/:userId", async (req, res) => {
                 </div>
                 <div class="info">
                     <p class="username">${user.username}</p>
-                    <p class="custom-status">${user.customStatus}</p>
-                    <p class="spotify-activity">${user.spotifyActivity}</p>
+                    <p class="custom-status">${user.customStatus || ''}</p>
+                    <p class="activity">${activityDetails || ''}</p>
                 </div>
             </div>
         </body>
