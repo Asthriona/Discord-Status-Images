@@ -32,6 +32,7 @@ function getActivityLabel(activity) {
 }
 
 app.get("/img/:userId", async (req, res) => {
+    
     const userId = req.params.userId || "754359468275531906";
     const guild = await client.guilds.fetch(process.env.DISCORD_GUILDID);
     const member = await guild.members.fetch({ user: userId, withPresences: true, force: true });
@@ -53,68 +54,80 @@ app.get("/img/:userId", async (req, res) => {
                 : `${label} ${activity.name}`;
         }
     }
-
     const statusColor = getStatusColor(user.status);
-
-    // Render HTML content with conditional layout adjustments
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Discord Status Card</title>
-            <style>
-                body { font-family: Arial, sans-serif; background-color: rgba(0,0,0,0); color: #ffffff; }
-                .card { width: 450px; padding: 20px; background-color: #2c2f33; border-radius: 8px; display: flex; align-items: center; }
-                .avatar-container { position: relative; }
-                .avatar { width: 80px; height: 80px; border-radius: 50%; }
-                .status-indicator {
-                    position: absolute;
-                    bottom: 5px;
-                    right: 5px;
-                    width: 20px;
-                    height: 20px;
-                    background-color: ${statusColor};
-                    border: 2px solid #2c2f33;
-                    border-radius: 50%;
-                }
-                .info { margin-left: 20px; display: flex; flex-direction: column; justify-content: center; }
-                .username {
-                    font-size: 20px;
-                    font-weight: bold;
-                    margin: ${user.customStatus || activityDetails ? '0 0 8px 0' : '0'};
-                    text-align: ${!user.customStatus && !activityDetails ? 'center' : 'left'};
-                }
-                .custom-status {
-                    font-size: 16px;
-                    color: #99aab5;
-                    margin: 0;
-                    display: ${user.customStatus ? 'block' : 'none'};
-                }
-                .activity {
-                    font-size: 16px;
-                    color: #99aab5;
-                    margin-top: ${user.customStatus ? '4px' : '0'};
-                    display: ${activityDetails ? 'block' : 'none'};
-                }
-            </style>
-        </head>
-        <body>
-            <div class="card">
-                <div class="avatar-container">
-                    <img src="${user.avatar}" alt="User Avatar" class="avatar">
-                    <span class="status-indicator"></span>
-                </div>
-                <div class="info">
-                    <p class="username">${user.username}</p>
-                    <p class="custom-status">${user.customStatus || ''}</p>
-                    <p class="activity">${activityDetails || ''}</p>
-                </div>
-            </div>
-        </body>
-        </html>
-    `);
+    
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    
+    res.send(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 120">
+        <defs>
+          <clipPath id="avatarClip">
+            <circle cx="40" cy="40" r="40"/>
+          </clipPath>
+        </defs>
+      
+        <!-- Card background -->
+        <rect width="450" height="120" rx="8" fill="#2c2f33"/>
+        
+        <!-- Avatar group - moved up by centering at y=20 -->
+        <g transform="translate(20,20)">
+          <!-- Avatar background and image -->
+          <circle cx="40" cy="40" r="40" fill="#2c2f33"/>
+          <image 
+            x="0" 
+            y="0" 
+            width="80" 
+            height="80" 
+            clip-path="url(#avatarClip)"
+            href="${user.avatar}"
+          />
+          
+          <!-- Status indicator -->
+          <circle 
+            cx="70" 
+            cy="70" 
+            r="10" 
+            fill="${statusColor}"
+            stroke="#2c2f33" 
+            stroke-width="2"
+          />
+        </g>
+      
+        <!-- Text content - adjusted y positions -->
+        <g transform="translate(120,20)">
+          <!-- Username -->
+          <text 
+            x="20" 
+            y="35" 
+            fill="#ffffff" 
+            font-family="Arial, sans-serif" 
+            font-size="20" 
+            font-weight="bold"
+          >${user.username}</text>
+      
+          <!-- Custom Status (if exists) -->
+          ${user.customStatus ? `
+          <text 
+            x="20" 
+            y="60" 
+            fill="#99aab5" 
+            font-family="Arial, sans-serif" 
+            font-size="16"
+          >${user.customStatus}</text>
+          ` : ''}
+      
+          <!-- Activity (if exists) -->
+          ${activityDetails ? `
+          <text 
+            x="20" 
+            y="${user.customStatus ? '85' : '60'}" 
+            fill="#99aab5" 
+            font-family="Arial, sans-serif" 
+            font-size="16"
+          >${activityDetails}</text>
+          ` : ''}
+        </g>
+      </svg>`)
 });
 
 // Start the server
