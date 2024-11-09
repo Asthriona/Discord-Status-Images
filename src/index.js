@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const { Client, GatewayIntentBits } = require('discord.js');
+const fs = require('fs');
 
 const app = express();
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences] });
@@ -36,6 +37,28 @@ app.get("/img/:userId", async (req, res) => {
     const userId = req.params.userId || "754359468275531906";
     const guild = await client.guilds.fetch(process.env.DISCORD_GUILDID);
     const member = await guild.members.fetch({ user: userId, withPresences: true, force: true });
+    const avatarUrl = member.user.displayAvatarURL({ extension: 'png', size: 4096 });
+    
+    // Cache directory
+    const cacheDir = './cache';
+    const avatarPath = `${cacheDir}/${userId}.png`;
+    
+    // Create cache directory if it doesn't exist
+    if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir);
+    }
+    
+    // Check if we have a cached version
+    if (!fs.existsSync(avatarPath)) {
+        // Download and cache the image
+        const response = await fetch(avatarUrl);
+        const buffer = await response.arrayBuffer();
+        fs.writeFileSync(avatarPath, Buffer.from(buffer));
+    }
+    
+    // Convert to base64 for inline embedding
+    const imageBuffer = fs.readFileSync(avatarPath);
+    const base64Image = imageBuffer.toString('base64');
 
     const user = {
         username: member.user.globalName || member.user.username,
@@ -79,7 +102,7 @@ app.get("/img/:userId", async (req, res) => {
             width="80" 
             height="80" 
             clip-path="url(#avatarClip)"
-            href="${user.avatar}"
+            href="data:image/png;base64,${base64Image}"
           />
           
           <!-- Status indicator -->
