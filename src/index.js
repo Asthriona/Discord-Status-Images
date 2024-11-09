@@ -65,7 +65,7 @@ app.get("/img/:userId", async (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Discord Status Card</title>
             <style>
-                body { font-family: Arial, sans-serif; background-color: #36393f; color: #ffffff; }
+                body { font-family: Arial, sans-serif; background-color: rgba(0,0,0,0); color: #ffffff; }
                 .card { width: 450px; padding: 20px; background-color: #2c2f33; border-radius: 8px; display: flex; align-items: center; }
                 .avatar-container { position: relative; }
                 .avatar { width: 80px; height: 80px; border-radius: 50%; }
