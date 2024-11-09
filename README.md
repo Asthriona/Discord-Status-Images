@@ -1,5 +1,5 @@
 # Discord Status Image  
-![](https://symmetrical-telegram-pwj74qvq95x277pq-3000.app.github.dev/img/754359468275531906)
+![](https://discord-status.asthriona.com/img/754359468275531906)
 
 This repo is a small service to create images with your discord status.  
 Many services already offer this, but I hate joining random discord servers, and the few ones who are "open sources" the code is often a mess
